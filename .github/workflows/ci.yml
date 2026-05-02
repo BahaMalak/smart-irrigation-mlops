@@ -51,7 +51,7 @@ jobs:
             'irrgation': False
         })
         df.to_csv('data/raw/plant_vase1.CSV', index=False)
-        df.to_csv('data/raw/plant_vase2.CSV', index=False)
+        df.to_csv('data/raw/plant_vase3.CSV', index=False)
         print('✅ Test dataset created')
         "
 

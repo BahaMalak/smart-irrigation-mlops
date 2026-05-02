@@ -14,14 +14,14 @@ import os
 # ══════════════════════════════════════════
 # 1. CHARGER ET MERGER LES 3 FICHIERS
 # ══════════════════════════════════════════
-print(" Chargement des données...")
+import glob
 
-df1 = pd.read_csv("data/raw/plant_vase1.CSV")
-df2 = pd.read_csv("data/raw/plant_vase1(2).CSV")
-df3 = pd.read_csv("data/raw/plant_vase2.CSV")
+# Charger tous les CSV automatiquement
+all_files = glob.glob("data/raw/*.CSV") + glob.glob("data/raw/*.csv")
+print(f"📂 Fichiers trouvés : {all_files}")
 
-df = pd.concat([df1, df2, df3], ignore_index=True)
-print(f" Dataset total : {df.shape[0]} lignes")
+dfs = [pd.read_csv(f) for f in all_files]
+df = pd.concat(dfs, ignore_index=True)
 
 # ══════════════════════════════════════════
 # 2. CRÉER LA TARGET INTELLIGEMMENT
