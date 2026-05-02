@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.env
+
+# MLflow
+mlruns/
+
+# Models (trop lourds pour GitHub)
+models/
+
+# Data (gérée par DVC)
+data/raw/
+
+# Streamlit
+.streamlit/

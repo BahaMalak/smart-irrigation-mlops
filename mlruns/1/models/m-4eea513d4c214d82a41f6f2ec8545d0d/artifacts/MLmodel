@@ -1,0 +1,23 @@
+artifact_path: file:C:/Users/malak/smart-irrigation-mlops/mlruns/1/models/m-4eea513d4c214d82a41f6f2ec8545d0d/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.5
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.7.2
+    skops_trusted_types: null
+mlflow_version: 3.11.1
+model_id: m-4eea513d4c214d82a41f6f2ec8545d0d
+model_size_bytes: 37683
+model_uuid: m-4eea513d4c214d82a41f6f2ec8545d0d
+prompts: null
+run_id: bcc4e1d4fab24a7db79e3cb18a4ac6cd
+utc_time_created: '2026-05-02 12:08:48.795989'
