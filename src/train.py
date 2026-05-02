@@ -11,9 +11,7 @@ import mlflow.sklearn
 import joblib
 import os
 
-# ══════════════════════════════════════════
-# 1. CHARGER ET MERGER LES 3 FICHIERS
-# ══════════════════════════════════════════
+
 import glob
 
 # Charger tous les CSV automatiquement
@@ -23,9 +21,7 @@ print(f"📂 Fichiers trouvés : {all_files}")
 dfs = [pd.read_csv(f) for f in all_files]
 df = pd.concat(dfs, ignore_index=True)
 
-# ══════════════════════════════════════════
-# 2. CRÉER LA TARGET INTELLIGEMMENT
-# ══════════════════════════════════════════
+
 # Moyenne des 5 capteurs
 df["moisture_mean"] = df[["moisture0","moisture1",
                            "moisture2","moisture3",
@@ -60,9 +56,7 @@ scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled  = scaler.transform(X_test)
 
-# ══════════════════════════════════════════
-# 4. LES 3 MODÈLES + MLFLOW
-# ══════════════════════════════════════════
+
 models = {
     "RandomForest":       RandomForestClassifier(n_estimators=100, random_state=42),
     "DecisionTree":       DecisionTreeClassifier(max_depth=5, random_state=42),
@@ -112,9 +106,7 @@ for name, model in models.items():
             best_model    = model
             best_name     = name
 
-# ══════════════════════════════════════════
-# 5. SAUVEGARDER LE MEILLEUR MODÈLE
-# ══════════════════════════════════════════
+
 os.makedirs("models", exist_ok=True)
 joblib.dump(best_model, "models/best_model.pkl")
 joblib.dump(scaler,     "models/scaler.pkl")
