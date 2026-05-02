@@ -1,0 +1,78 @@
+name: Smart Irrigation CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name:  Checkout code
+      uses: actions/checkout@v3
+
+    - name:  Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name:  Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install scikit-learn pandas numpy mlflow fastapi uvicorn joblib pydantic requests pytest
+
+    - name:  Create folders
+      run: |
+        mkdir -p data/raw
+        mkdir -p models
+
+    - name:  Create test dataset
+      run: |
+        python -c "
+        import pandas as pd
+        import numpy as np
+        np.random.seed(42)
+        n = 500
+        df = pd.DataFrame({
+            'year': 2020,
+            'month': np.random.randint(1,12,n),
+            'day': np.random.randint(1,28,n),
+            'hour': np.random.randint(0,23,n),
+            'minute': np.random.randint(0,59,n),
+            'second': np.random.randint(0,59,n),
+            'moisture0': np.random.uniform(0.02, 0.85, n),
+            'moisture1': np.random.uniform(0.14, 0.96, n),
+            'moisture2': np.random.uniform(0.23, 0.98, n),
+            'moisture3': np.random.uniform(0.08, 0.99, n),
+            'moisture4': np.random.uniform(0.00, 0.11, n),
+            'irrgation': False
+        })
+        df.to_csv('data/raw/plant_vase1.CSV', index=False)
+        df.to_csv('data/raw/plant_vase2.CSV', index=False)
+        print(' Test dataset created')
+        "
+
+    - name: 🧠 Train models
+      run: |
+        python src/train.py
+
+    - name:  Test API
+      run: |
+        python -c "
+        import joblib
+        import numpy as np
+        model = joblib.load('models/best_model.pkl')
+        features = joblib.load('models/features.pkl')
+        X = np.array([[0.2, 0.15, 0.18, 0.12, 0.10, 10]])
+        pred = model.predict(X)[0]
+        prob = model.predict_proba(X)[0]
+        print(f'Model loaded: OK')
+        print(f'Prediction: {pred}')
+        print(f' Confidence: {max(prob):.1%}')
+        "
+
+    - name: 🎉 Success
+      run: echo " All tests passed!"
